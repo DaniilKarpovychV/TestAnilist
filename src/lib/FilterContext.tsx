@@ -2,24 +2,24 @@ import React, { createContext, Dispatch, ReactElement, SetStateAction, useState 
 
 interface Filter {
     searchInput: string,
-    includeTags: string[]|[],
-    excludeTags: string[]|[],
+    includeTags: any,
+    excludeTags: any,
     minMessagesSent: number|string,
     maxMessagesSent: number|string,
     maxMessagesRecv: number|string,
     minMessagesRecv: number | string,
-    page:string|undefined,
+    page:any,
 
 }
 interface State {
     searchInput: string,
-    includeTags: string[]|[],
-    excludeTags: string[]|[],
+    includeTags: any,
+    excludeTags: any,
     minMessagesSent: number|string,
     maxMessagesSent: number|string,
     maxMessagesRecv: number|string,
     minMessagesRecv: number | string,
-    page:string|undefined,
+    page:any,
     setFilters:Dispatch<SetStateAction<Filter>>
 };
 
@@ -35,7 +35,7 @@ export const FilterContext = createContext<State>({
   maxMessagesSent: '',
   maxMessagesRecv: '',
   minMessagesRecv: '',
-  page: '',
+  page: 1,
   setFilters: () => {}
 })
 
@@ -48,7 +48,7 @@ export const FilterProvider = (props:Props) => {
     maxMessagesSent: '',
     maxMessagesRecv: '',
     minMessagesRecv: '',
-    page: ''
+    page: 1
   })
   return (
     <FilterContext.Provider value={{ ...filters, setFilters }}>

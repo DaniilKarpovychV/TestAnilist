@@ -1,10 +1,9 @@
 import { useContext } from 'react'
 import { useQuery } from 'react-query'
-import { api } from '../api/api'
+import { anilistApi } from '../api/anilistApi'
 import { FilterContext } from '../lib/FilterContext'
-import { ContactsResponse } from '../types/types'
 
-export const useContact = () => {
+export const useAnilist = () => {
   const {
     searchInput,
     includeTags,
@@ -15,8 +14,8 @@ export const useContact = () => {
     minMessagesRecv,
     page
   } = useContext(FilterContext)
-  const returnTotalCount = 'true'
-  const query = useQuery<ContactsResponse, Error>(`${['contact',
+  console.log('useAnilist', includeTags)
+  const { data, isSuccess, isLoading } = useQuery(`${['anilist',
     searchInput,
     includeTags,
     excludeTags,
@@ -25,7 +24,7 @@ export const useContact = () => {
     maxMessagesRecv,
     minMessagesRecv,
     page
-  ]}`, () => api.getContact(
+  ]}`, () => anilistApi.getAnilist(
     searchInput,
     includeTags,
     excludeTags,
@@ -33,8 +32,7 @@ export const useContact = () => {
     maxMessagesSent,
     maxMessagesRecv,
     minMessagesRecv,
-    returnTotalCount,
     page
   ))
-  return query
+  return { data, isSuccess, isLoading }
 }

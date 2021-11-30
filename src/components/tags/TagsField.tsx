@@ -20,28 +20,23 @@ const TagsFieldWrapper = styled.div`
 margin-top:1rem;
 `
 interface Props {
-  setState: Dispatch<SetStateAction<string[]>>,
+  setState: Dispatch<SetStateAction<any>>,
   tagsArray: {
     name: string,
     filters:{}
   }[] | [],
   title:string,
-  includeTags: string[],
-  isSuccess:boolean,
+  isSuccess: boolean,
+  include:string
 }
 
-export const TagsField: FC<Props> = ({ title, setState, tagsArray, includeTags, isSuccess }) => {
-  const onClickHandler = (name: string) => {
-    setState((state) => {
+export const TagsField: FC<Props> = ({ title, setState, tagsArray, isSuccess, include }) => {
+  const onClickHandler = (name: any) => {
+    setState((state: any) => {
       if (state.includes(name)) {
-        return [...state.filter(tag => tag !== name)]
+        return state.filter((item:any) => item !== name)
       }
-      console.log([...state, name])
-      const set = new Set([...state, name])
-
-      const newState = [...set]
-
-      return newState
+      return [...state, name]
     })
   }
   return (
@@ -52,7 +47,7 @@ export const TagsField: FC<Props> = ({ title, setState, tagsArray, includeTags, 
         <tbody>
           {isSuccess && tagsArray.map((tag, index) => {
             return (
-              <Tag key={index} tag={tag} onClickHandler={onClickHandler} includeTags={includeTags} />
+              <Tag key={index} tag={tag} onClickHandler={onClickHandler} include={include} />
             )
           })}
         </tbody>

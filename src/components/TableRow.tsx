@@ -1,28 +1,17 @@
-import React, { Dispatch, FC, SetStateAction } from 'react'
+import React, { FC } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import styled from 'styled-components'
-import { IMAGES } from '../img/index'
+import { IMAGES } from '../img'
 
-interface Props {
-  contact: {
-    id: number,
-    name: string,
-    phoneNumber: string,
-    tags: {name:string}[]
-  },
-  selectContact: number[],
-  setSelectContact:Dispatch<SetStateAction<number[]>>
-}
 const ContainerRow = styled(Row)`
 border-bottom: 1px solid rgb(220 220 220);;
-height:60px;
+height:10rem;
 `
 const Img = styled.img`
 height:1.5rem;
 `
 const ProfileImg = styled.img`
-height:3rem;
-border-radius:100px;
+height:9rem;
 margin-left:1rem;
 `
 const ProfileImgWrapper = styled.div`
@@ -38,6 +27,7 @@ align-items: center;
 `
 const CustomCol = styled(Col)`
 display:flex;
+width:200px;
 `
 const TextWrapper = styled.div`
 margin-left:1rem;
@@ -49,11 +39,11 @@ align-items: center;
 `
 const Span = styled.span`
 background-color:#23aea3;
-padding:0 0.8rem;
-border-radius:2rem;
+margin:0.1rem;
 color: white;
 font-size:0.8rem;
-margin-left:0.6rem;
+padding:0.15rem;
+border-radius:0.5rem;
 `
 const Button = styled.button`
 width:18px;
@@ -65,26 +55,29 @@ color:white;
 font-size:16px;
 border:0px;
 `
+const TagsWrapper = styled.div`
+width:700px;
+height:100%;
+`
 
-export const TableRow: FC<Props> = ({ contact, selectContact, setSelectContact }) => {
+export const TableRow: FC<any> = ({ id, title, coverImage, tags, selectContact, setSelectContact }) => {
   return (
     <ContainerRow>
       <CustomCol>
         <ImgWrapper>
-          <Img src={selectContact.includes(contact.id) ? IMAGES.green : IMAGES.grey} alt='status' />
+          <Img src={selectContact.includes(id) ? IMAGES.green : IMAGES.grey} alt='status' />
         </ImgWrapper>
         <ProfileImgWrapper>
-          <ProfileImg src={IMAGES.deadpool} alt='profile photo' />
+          <ProfileImg src={coverImage.medium} alt='profile photo' />
         </ProfileImgWrapper>
         <TextWrapper>
-          <h6>{contact.name}</h6>
-          <span>{contact.phoneNumber}</span>
+          <h6>{title.romaji}</h6>
         </TextWrapper>
       </CustomCol>
       <CustomColButton>
-        {contact.tags.map((tag, index) => <Span key={index}>{tag.name}</Span>)}
-        {!selectContact.includes(contact.id) && <Button onClick={() => setSelectContact(state => [...state, contact.id])}>+</Button>}
-        {selectContact.includes(contact.id) && contact && <Button onClick={() => setSelectContact(state => state.filter(item => item !== contact.id))}>-</Button>}
+        <TagsWrapper>{tags.map((tag:any, index:any) => <Span key={index}>{tag.name}</Span>)}</TagsWrapper>
+        {!selectContact.includes(id) && <Button onClick={() => setSelectContact((state:any) => [...state, id])}>+</Button>}
+        {selectContact.includes(id) && <Button onClick={() => setSelectContact((state:any) => state.filter((item:any) => item !== id))}>-</Button>}
       </CustomColButton>
     </ContainerRow>
   )

@@ -1,12 +1,11 @@
 import React, { useContext, useState, FC } from 'react'
 import styled from 'styled-components'
-import { useTags } from '../../hooks/useTags'
 import { FilterContext } from '../../lib/FilterContext'
 import { FilterButton } from './FilterButton'
-import { FilterInput } from './FilterInput'
 import { TagsField } from '../tags/TagsField'
 import { IMAGES } from '../../img'
 import { Contact } from '../../types/types'
+import { useTagsGenre } from '../../hooks/useTagsGenre'
 
 const FilterWrapper = styled.div`
 height:100%;
@@ -37,25 +36,25 @@ padding-top:0.2rem;
 `
 
 export const Filter: FC<{ contacts: Contact[] }> = ({ contacts }) => {
-  const { data, isSuccess } = useTags()
-  const tagsArray = data ? data.tags : []
+  const { data, isSuccess } = useTagsGenre()
+  const genreCollection = isSuccess ? data.data.GenreCollection : []
+  const mediaTagCollection = isSuccess ? data.data.MediaTagCollection : []
   const { setFilters } = useContext(FilterContext)
-  const [include, setInclude] = useState<string[]>([])
-  const [Exclude, setExclude] = useState<string[]>([])
-  const [sendLength, setSendLength] = useState<{min:number|string, max:number|string}>({ min: '', max: '' })
-  const [receivedLength, setReceivedLength] = useState<{ min: number | string, max: number | string }>({ min: '', max: '' })
-
+  const [include, setInclude] = useState<any>([])
+  const [Exclude, setExclude] = useState<any>([])
+  // const [sendLength, setSendLength] = useState<{min:number|string, max:number|string}>({ min: '', max: '' })
+  // const [receivedLength, setReceivedLength] = useState<{ min: number | string, max: number | string }>({ min: '', max: '' })
   const onSubmitHandler = () => {
-    setFilters((state) => {
+    setFilters((state:any) => {
       return {
         ...state,
-        page: '',
+        page: 1,
         includeTags: include,
-        excludeTags: Exclude,
-        minMessagesSent: sendLength.min,
-        maxMessagesSent: sendLength.max,
-        minMessagesRecv: receivedLength.min,
-        maxMessagesRecv: receivedLength.max
+        excludeTags: Exclude
+        // minMessagesSent: sendLength.min,
+        // maxMessagesSent: sendLength.max,
+        // minMessagesRecv: receivedLength.min,
+        // maxMessagesRecv: receivedLength.max
       }
     })
   }
@@ -69,10 +68,8 @@ export const Filter: FC<{ contacts: Contact[] }> = ({ contacts }) => {
         </MenuTitleWrapper>
         <Span>{contacts && contacts.length} Contacts</Span>
       </FilterHeaderWrapper>
-      <TagsField title='Include Tags:' setState={setInclude} includeTags={include} tagsArray={tagsArray} isSuccess={isSuccess}/>
-      <TagsField title='Exclude Tags:' setState={setExclude} includeTags={Exclude} tagsArray={tagsArray} isSuccess={isSuccess}/>
-      <FilterInput title='Message Sent:' setState={setSendLength} value={ sendLength }/>
-      <FilterInput title='Message Received:'setState={setReceivedLength} value={ receivedLength }/>
+      <TagsField title='Genre:' setState={setInclude} tagsArray={genreCollection} include={include} isSuccess={isSuccess}/>
+      <TagsField title='Tags:' setState={setExclude} tagsArray={mediaTagCollection} isSuccess={isSuccess} include={Exclude}/>
       <FilterButton onSubmitHandler={onSubmitHandler}/>
     </FilterWrapper>
 

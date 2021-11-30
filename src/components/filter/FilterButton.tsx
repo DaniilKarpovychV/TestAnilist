@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap'
 import styled from 'styled-components'
 
 const ButtonWrapper = styled.div`
-margin-top:19rem;
+margin-top:30rem;
 width:100%;
 display:flex;
 border-radius:0.6rem;

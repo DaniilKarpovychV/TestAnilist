@@ -26,17 +26,17 @@ position:relative;
 `
 
 export const SearchField = () => {
-  const { setFilters } = useContext(FilterContext)
+  const { setFilters, searchInput } = useContext(FilterContext)
 
   const onChangeHandler = debounce((event: ChangeEvent<HTMLInputElement>) => {
     setFilters((state) => {
-      return { ...state, searchInput: event.target.value, page: '' }
+      return { ...state, searchInput: event.target.value, page: 1 }
     })
-  }, 1000)
+  }, 500)
 
   return (
     <Wrapper>
-      <Img src={IMAGES.search} />
+      {!searchInput && <Img src={IMAGES.search} />}
       <CustomInputGroup>
         <Input
           onChange={onChangeHandler}

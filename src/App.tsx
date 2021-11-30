@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
+import { anilistApi } from './api/anilistApi'
 import './App.css'
 import { Container } from './components/Container'
 
@@ -13,6 +14,8 @@ padding: 2rem;
 `
 
 export const App: FC = () => {
+  const data = anilistApi.getTagsGenre()
+  console.log('APP', data)
   return (
     <AppWrapper>
       <Container />

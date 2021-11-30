@@ -38,17 +38,6 @@ justify-content: end;
 align-items: center;
 `
 
-const Button = styled.button`
-height:30px;
-width:30px;
-background-color:#23aea3;
-border-radius:1rem;
-color:white;
-margin-top:0.5rem;
-font-size:22px;
-padding: 0rem 1.5rem 2.2rem 0.7rem;
-border:0px;
-`
 const ExportButton = styled.button`
 background-color:#23aea3;
 border-radius:0.5rem;
@@ -62,38 +51,45 @@ interface Props {
   contacts: Contact[],
   page:string|undefined,
   setContactsState: Dispatch<SetStateAction<Contact[]>>,
-  onScrollHandler:(event: UIEvent<HTMLDivElement, UIEvent>)=>void
+  onScrollHandler: (event: UIEvent<HTMLDivElement, UIEvent>) => void,
+  isLoading:boolean,
 }
 
-export const TableList: FC<Props> = ({ contacts, onScrollHandler, page }) => {
+export const TableList: FC<Props> = ({ contacts, onScrollHandler, page, isLoading }) => {
   const [selectAll, setSelectAll] = useState<number[]>([])
   const onClickSelectAll = () => {
     setSelectAll(contacts.map((item: { id: number }) => item.id))
+  }
+  const onClickDeselect = () => {
+    setSelectAll([])
   }
   return (
     <>
       <CustomContainer onScroll={onScrollHandler} >
         <Header>
           <h2>{`All contacts(${contacts ? contacts.length : 0})`}</h2>
-          <Button>+</Button>
         </Header>
         <SearchField />
         <ContainerRow>
           <CustomCol>
-            <ImgWrapper onClick={onClickSelectAll} >
+            {selectAll.length !== contacts.length && <ImgWrapper onClick={onClickSelectAll} >
               <Img src={IMAGES.grey} alt='status' />
               <span>Select all</span>
             </ImgWrapper>
+            }
+            {selectAll.length === contacts.length && contacts.length !== 0 && <ImgWrapper onClick={onClickDeselect} >
+              <Img src={IMAGES.green} alt='status' />
+              <span>Select all</span>
+            </ImgWrapper>}
             <CustomColButton>
-              {true && <ExportButton onClick={() => true}>Export All</ExportButton>}
               {false && <ExportButton onClick={() => false}>-</ExportButton>}
             </CustomColButton>
           </CustomCol>
         </ContainerRow>
         {Array.isArray(contacts) &&
-          contacts.map((contact: Contact) => <TableRow key={contact.id} contact={contact}
-            selectContact={selectAll} setSelectContact={setSelectAll} />)}
-        {page !== null && <p>...Loading</p>}
+          contacts.map((anime:any) => <TableRow key={anime.id} title={anime.title} coverImage={anime.coverImage} tags={anime.tags}
+            selectContact={selectAll} setSelectContact={setSelectAll} id={anime.id} />)}
+        {isLoading && <p>...Loading</p>}
       </CustomContainer>
     </>
   )
